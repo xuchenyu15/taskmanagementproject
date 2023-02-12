@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<h1>
+    Hello Task Management System
+</h1>
+<body>
+<form action="/addTaskItem/" method="POST">
+    {% csrf_token %}
+    <input type="text" name="content">
+    <input type="submit" value="Add Task Item">
+</form>
+<ul>
+    {% for i in all_items %}
+    <li>
+        {{i.content}}
+        <form action="/deleteTaskItem/{{i.id}}" method="POST">
+            {% csrf_token %}
+            <input type="submit" value="Delete">
+        </form>
+    </li>
+    {% endfor %}
+</ul>
+</body>
+</html>
