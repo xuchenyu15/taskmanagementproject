@@ -1,6 +1,7 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from .models import TaskManagementItem
+from .models import *
+import datetime
 
 # Create your views here.
 def taskmanagementView(request):
@@ -19,3 +20,24 @@ def deleteTaskView(request, i):
     item = TaskManagementItem.objects.get(id=x)
     item.delete()
     return HttpResponseRedirect('/taskmanagement/')
+
+def editTaskView(request, i):
+    item = TaskManagementItem.objects.get(id=i)
+    return render(request, 'edittask.html', {'item': item})
+
+def updateTaskView(request, i):
+    item = TaskManagementItem.objects.get(id=i)
+    content = request.POST['content']
+    status = request.POST['status']
+    item.set_content(content)
+    item.set_status(status)
+    item.set_created_at(datetime.datetime.now())
+    item.save()
+    return HttpResponseRedirect('/taskmanagement/')
+
+def searchTaskView(request):
+    query = request.POST['query']
+    results = {
+        "all_items": TaskManagementItem.objects.filter(content__icontains=query)
+    }
+    return render(request, 'taskmanagement.html', results)

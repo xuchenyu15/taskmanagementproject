@@ -2,12 +2,17 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Task Management System</title>
 </head>
 <h1>
     Hello Task Management System
 </h1>
 <body>
+<form action="/searchTaskItem/" method="POST">
+    {% csrf_token %}
+    <input type="text" name="query">
+    <input type="submit" value="Search">
+</form>
 <form action="/addTaskItem/" method="POST">
     {% csrf_token %}
     <input type="text" name="content">
@@ -16,7 +21,11 @@
 <ul>
     {% for i in all_items %}
     <li>
-        {{i.content}}
+        {{i.get_content}}: {{i.get_status}}
+        <form action="/editTaskItem/{{i.id}}" method="POST">
+            {% csrf_token %}
+            <input type="submit" value="Edit">
+        </form>
         <form action="/deleteTaskItem/{{i.id}}" method="POST">
             {% csrf_token %}
             <input type="submit" value="Delete">
@@ -24,5 +33,9 @@
     </li>
     {% endfor %}
 </ul>
+<form action="/taskmanagement/" method="POST">
+    {% csrf_token %}
+    <input type="submit" value="Home">
+</form>
 </body>
 </html>
